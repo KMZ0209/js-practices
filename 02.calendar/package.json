@@ -8,5 +8,10 @@
     "eslint-config-prettier": "^8.8.0",
     "prettier": "^2.8.8"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "dayjs": "^1.11.9",
+    "luxon": "^3.4.2",
+    "moment-timezone": "^0.5.43"
+  }
 }
