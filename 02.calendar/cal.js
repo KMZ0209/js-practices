@@ -1,21 +1,11 @@
 import dayjs from "dayjs";
 import "dayjs/locale/ja.js";
+import minimist from "minimist";
 dayjs.locale("ja");
 
-const params = process.argv.slice(2);
-let month = null;
-let year = null;
-
-for (let i = 0; i < params.length; i++) {
-  const param = params[i];
-  if (param === "-m" && i + 1 < params.length) {
-    month = parseInt(params[i + 1], 10);
-    i++;
-  } else if (param === "-y" && i + 1 < params.length) {
-    year = parseInt(params[i + 1], 10);
-    i++;
-  }
-}
+const args = minimist(process.argv.slice(2));
+let month = args.m ? parseInt(args.m, 10) : null;
+let year = args.y ? parseInt(args.y, 10) : null;
 
 if (month === null) {
   const today = dayjs();

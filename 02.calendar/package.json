@@ -12,6 +12,7 @@
   "dependencies": {
     "dayjs": "^1.11.9",
     "luxon": "^3.4.2",
+    "minimist": "^1.2.8",
     "moment-timezone": "^0.5.43"
   }
 }
