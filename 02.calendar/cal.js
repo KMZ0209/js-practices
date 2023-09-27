@@ -4,29 +4,28 @@ import minimist from "minimist";
 dayjs.locale("ja");
 
 const args = minimist(process.argv.slice(2));
-let month = args.m ? parseInt(args.m, 10) : null;
-let year = args.y ? parseInt(args.y, 10) : null;
+let month = args.m ? (args.m) : null;
+let year = args.y ? (args.y) : null;
 
+const today = dayjs();
 if (month === null) {
-  const today = dayjs();
   month = today.month() + 1;
 }
 if (year === null) {
-  const today = dayjs();
   year = today.year();
 }
 
-const first_day = dayjs()
+const firstDay = dayjs()
   .year(year)
   .month(month - 1)
   .startOf("month");
-const last_day = dayjs()
+const lastDay = dayjs()
   .year(year)
   .month(month - 1)
   .endOf("month");
 
-const currentMonth = first_day.format("M");
-const currentYear = first_day.format("YYYY");
+const currentMonth = firstDay.format("M");
+const currentYear = firstDay.format("YYYY");
 
 const consoleWidth = 20;
 
@@ -39,17 +38,15 @@ const centeredText =
 console.log(centeredText);
 console.log(`日 月 火 水 木 金 土`);
 
-for (let i = 0; i < first_day.day(); i++) {
+for (let i = 0; i < firstDay.day(); i++) {
   process.stdout.write("   ");
 }
 
-let current_day = first_day;
-while (current_day.isBefore(last_day) || current_day.isSame(last_day, "day")) {
-  const dayOfMonth = current_day.format("D");
+for (let currentDay = firstDay; currentDay.isBefore(lastDay) || currentDay.isSame(lastDay, "day"); currentDay = currentDay.add(1, "day")) {
+  const dayOfMonth = currentDay.format("D");
   const cell = dayOfMonth.padStart(2, " ");
   process.stdout.write(cell + " ");
-  if (current_day.day() === 6) {
+  if (currentDay.day() === 6 || currentDay.isSame(lastDay, "day")) {
     console.log("");
   }
-  current_day = current_day.add(1, "day");
 }
