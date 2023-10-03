@@ -32,7 +32,7 @@ const centeredText =
   " ".repeat(spacesToAdd) + currentMonth + "月 " + currentYear;
 
 console.log(centeredText);
-console.log(`日 月 火 水 木 金 土`);
+console.log("日 月 火 水 木 金 土");
 
 for (let i = 0; i < firstDay.day(); i++) {
   process.stdout.write("   ");
