@@ -4,12 +4,9 @@ import minimist from "minimist";
 dayjs.locale("ja");
 
 const args = minimist(process.argv.slice(2));
-let month = args.m ? args.m : null;
-let year = args.y ? args.y : null;
-
 const today = dayjs();
-month = month || today.month() + 1;
-year = year || today.year();
+const month = args.m || today.month() + 1;
+const year = args.y || today.year();
 
 const firstDay = dayjs()
   .year(year)
