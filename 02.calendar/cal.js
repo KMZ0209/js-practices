@@ -5,8 +5,8 @@ dayjs.locale("ja");
 
 const args = minimist(process.argv.slice(2));
 const today = dayjs();
-const month = args.m || today.month() + 1;
-const year = args.y || today.year();
+const month = args.m ?? today.month() + 1;
+const year = args.y ?? today.year();
 
 const firstDay = dayjs()
   .year(year)
