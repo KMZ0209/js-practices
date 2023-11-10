@@ -29,12 +29,12 @@ db.run(
             } else {
               console.log(row.id, row.title);
             }
+            db.run("DROP TABLE books", () => {
+              db.close();
+            });
           });
         });
       });
     });
   }
 );
-db.run("DROP TABLE books", () => {
-  db.close();
-});
