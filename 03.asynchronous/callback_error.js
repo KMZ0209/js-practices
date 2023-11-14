@@ -23,16 +23,24 @@ db.run(
           } else {
             console.log(`Inserted row with ID: ${this.lastID}`);
           }
-          db.each("SELECT * FROM nonexistent", (err, row) => {
-            if (err) {
-              console.error(`エラー selecting record: ${err.message}`);
-            } else {
-              console.log(row.id, row.title);
+          db.each(
+            "SELECT * FROM nonexistent",
+            (err, row) => {
+              if (err) {
+                console.error(`エラー selecting record: ${err.message}`);
+              } else {
+                console.log(row.id, row.title);
+              }
+            },
+            (err) => {
+              if (err) {
+                console.error(`エラー selecting record: ${err.message}`);
+              }
+              db.run("DROP TABLE books", () => {
+                db.close();
+              });
             }
-          });
-          db.run("DROP TABLE books", () => {
-            db.close();
-          });
+          );
         });
       });
     });
