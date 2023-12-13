@@ -2,56 +2,59 @@ import sqlite3 from "sqlite3";
 
 const db = new sqlite3.Database(":memory:");
 
-function runPromise(param, callback) {
+// import {runPromise, allPromise} from "./common.js";
+
+function runPromise () {
   return new Promise((resolve) => {
-    db.run(param, callback, function () {
-      resolve({ lastID: this.lastID });
-    });
+    db.run(
+        "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
+        () => {
+          db.run(
+            "INSERT INTO books (title) VALUES (?)",
+            ["Cherry Book 1"],
+            function () {
+              const lastID1 = this.lastID;
+
+          db.run(
+            "INSERT INTO books (title) VALUES (?)",
+            ["Cherry Book 2"],
+            function () {
+              const lastID2 = this.lastID;
+              resolve([`lastID1: ${lastID1}`, `lastID2: ${lastID2}`]);
+            }
+            );
+          }
+        );
+      }
+    );
   });
 }
 
-function eachPromise(param, callback) {
+function allPromise () {
   return new Promise((resolve) => {
-    db.each(param, callback, function () {
-      resolve();
-    });
-  });
-}
+      db.all(
+        "SELECT * FROM books",
+        (_, rows) => {
+          resolve(rows);
+        }
+        );
+      });
+    }
 
-runPromise(
-  "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
-)
-  .then(() => {
-    return runPromise("INSERT INTO books (title) VALUES (?)", [
-      "Cherry Book 1",
-    ]);
-  })
-  .then((result) => {
-    console.log(`lastID: ${result.lastID}`);
-    return eachPromise("SELECT * FROM books");
-  })
-  .then(() => {
-    return runPromise("INSERT INTO books (title) VALUES (?)", [
-      "Cherry Book 2",
-    ]);
-  })
-  .then((result) => {
-    console.log(`lastID: ${result.lastID}`);
-    return eachPromise("SELECT * FROM books");
-  })
-  .then(() => {
-    return runPromise("INSERT INTO books (title) VALUES (?)", [
-      "Cherry Book 3",
-    ]);
-  })
-  .then((result) => {
-    console.log(`lastID: ${result.lastID}`);
-    return eachPromise("SELECT * FROM books", (_, row) => {
-      console.log(row.id, row.title);
+    runPromise()
+  .then((lastIDs) => {
+    lastIDs.forEach((lastID) => {
+      console.log(lastID);
     });
+    return allPromise();
   })
-  .then(() => {
-    return runPromise("DROP TABLE books", () => {
-      db.close();
+    .then((rowsData) => {
+      rowsData.forEach((row) => {
+        console.log(row.id, row.title);
+      });
+    })
+    .finally(() => {
+      db.run("DROP TABLE books", () => {
+        db.close();
+      });
     });
-  });
