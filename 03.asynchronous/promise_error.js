@@ -33,9 +33,9 @@ runPromise(
       "CherryBookContent1",
     ]); // SQLのパラメータが2つあっても動くようにする
   })
-  .catch((err) => {
-    console.error(`エラー1 inserting record: ${err.message}`);
-  }) // エラーメッセージを出す
+  .catch((err) =>
+    console.error(`エラー1 inserting record: ${err.message}`)
+  ) // エラーメッセージを出す
   .then((result) => {
     console.log(`lastID1: ${result.lastID}`);
     return runPromise("INSERT INTO books (title, content) VALUES (null)", [
@@ -43,9 +43,9 @@ runPromise(
       "CherryBookContent2",
     ]); // SQLのパラメータが2つあっても動くようにする
   })
-  .catch((err) => {
-    console.error(`エラー2 inserting record: ${err.message}`);
-  })
+  .catch((err) =>
+    console.error(`エラー2 inserting record: ${err.message}`)
+  )
   .then((result) => {
     console.log(`lastID2: ${result.lastID}`);
     return runPromise("INSERT INTO books (title, content) VALUES (null)", [
@@ -53,24 +53,24 @@ runPromise(
       "CherryBookContent3",
     ]);
   }) // result.lastIDが動くようにする
-  .catch((err) => {
-    console.error(`エラー3 inserting record:, ${err.message}`);
-  })
+  .catch((err) =>
+    console.error(`エラー3 inserting record:, ${err.message}`)
+  )
 
-  .then(() => {
-    return allPromise("SELECT * FROM books", null);
-  })
+  .then(() =>
+    allPromise("SELECT * FROM books", null)
+  )
   .then((rows) => {
-    rows.forEach((row) => {
-      console.log(row.id, row.title, row.content);
-    });
+    rows.forEach((row) =>
+      console.log(row.id, row.title, row.content)
+    );
   })
-  .catch((err) => {
-    console.error(`エラー selecting record: ${err.message}`);
-  })
-  .then(() => {
-    return runPromise("DROP TABLE books");
-  })
-  .then(() => {
-    db.close();
-  })
+  .catch((err) =>
+    console.error(`エラー selecting record: ${err.message}`)
+  )
+  .then(() =>
+    runPromise("DROP TABLE books")
+  )
+  .then(() =>
+    db.close()
+  )
