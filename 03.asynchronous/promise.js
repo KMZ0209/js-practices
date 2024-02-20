@@ -49,20 +49,20 @@ runPromise(
       "CherryBookContent3",
     ]); // SQLのパラメータが2つあっても動くようにする
   })
-  .then((result) => {
-    console.log(`lastID3: ${result.lastID}`);
-  }) // result.lastIDが動くようにする
-  .then(() => {
-    return allPromise("SELECT * FROM books");
-  })
-  .then((rows) => {
-    rows.forEach((row) => {
-      console.log(row.id, row.title, row.content);
-    });
-  })
-  .then(() => {
-    return runPromise("DROP TABLE books");
-  })
-  .then(() => {
-    db.close();
-  });
+  .then((result) =>
+  console.log(`lastID3: ${result.lastID}`)
+  ) // result.lastIDが動くようにする
+  .then(() =>
+  allPromise("SELECT * FROM books")
+  )
+  .then((rows) =>
+    rows.forEach((row) =>
+      console.log(row.id, row.title, row.content)
+    )
+  )
+  .then(() =>
+    runPromise("DROP TABLE books")
+  )
+  .then(() =>
+    db.close()
+  );
