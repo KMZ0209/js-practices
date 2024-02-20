@@ -65,12 +65,12 @@ runPromise(
       console.log(row.id, row.title, row.content);
     });
   })
+  .catch((err) => {
+    console.error(`エラー selecting record: ${err.message}`);
+  })
   .then(() => {
     return runPromise("DROP TABLE books");
   })
   .then(() => {
     db.close();
   })
-  .catch((err) => {
-    console.error(`エラー selecting record: ${err.message}`);
-  });
