@@ -2,59 +2,67 @@ import sqlite3 from "sqlite3";
 
 const db = new sqlite3.Database(":memory:");
 
-// import {runPromise, allPromise} from "./common.js";
-
-function runPromise () {
-  return new Promise((resolve) => {
-    db.run(
-        "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
-        () => {
-          db.run(
-            "INSERT INTO books (title) VALUES (?)",
-            ["Cherry Book 1"],
-            function () {
-              const lastID1 = this.lastID;
-
-          db.run(
-            "INSERT INTO books (title) VALUES (?)",
-            ["Cherry Book 2"],
-            function () {
-              const lastID2 = this.lastID;
-              resolve([`lastID1: ${lastID1}`, `lastID2: ${lastID2}`]);
-            }
-            );
-          }
-        );
+function runPromise(sql, param) {
+  return new Promise((resolve, reject) => {
+    db.run(sql, param, function (err) {
+      if (!err) {
+        resolve(this);
+      } else {
+        reject(err);
       }
-    );
+    });
   });
 }
 
-function allPromise () {
-  return new Promise((resolve) => {
-      db.all(
-        "SELECT * FROM books",
-        (_, rows) => {
-          resolve(rows);
-        }
-        );
-      });
-    }
+function allPromise(sql, param) {
+  return new Promise((resolve, reject) => {
+    db.all(sql, param, function (err, rows) {
+      if (!err) {
+        resolve(rows);
+      } else {
+        reject(err);
+      }
+    });
+  });
+}
 
-    runPromise()
-  .then((lastIDs) => {
-    lastIDs.forEach((lastID) => {
-      console.log(lastID);
-    });
-    return allPromise();
+runPromise(
+  "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE, content TEXT NOT NULL UNIQUE)",
+)
+  .then(() => {
+    return runPromise("INSERT INTO books (title, content) VALUES (?, ?)", [
+      "CherryBook1",
+      "CherryBookContent1",
+    ]); // SQLのパラメータが2つあっても動くようにする
   })
-    .then((rowsData) => {
-      rowsData.forEach((row) => {
-        console.log(row.id, row.title);
-      });
-    })
-    .finally(() => {
-      db.run("DROP TABLE books", () => {
-        db.close();
-      });
+  .then((result) => {
+    console.log(`lastID1: ${result.lastID}`);
+    return runPromise("INSERT INTO books (title, content) VALUES (?, ?)", [
+      "CherryBook2",
+      "CherryBookContent2",
+    ]); // SQLのパラメータが2つあっても動くようにする
+  })
+  .then((result) => {
+    console.log(`lastID2: ${result.lastID}`);
+    return runPromise("INSERT INTO books (title, content) VALUES (?, ?)", [
+      "CherryBook3",
+      "CherryBookContent3",
+    ]); // SQLのパラメータが2つあっても動くようにする
+  })
+  .then((result) => {
+    console.log(`lastID3: ${result.lastID}`);
+  }) // result.lastIDが動くようにする
+  .then(() => {
+    return allPromise("SELECT * FROM books");
+  })
+  .then((rows) => {
+    rows.forEach((row) => {
+      console.log(row.id, row.title, row.content);
     });
+  })
+  .then(() => {
+    return runPromise("DROP TABLE books");
+  })
+  .then(() => {
+    db.close();
+  });
