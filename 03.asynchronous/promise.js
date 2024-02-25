@@ -16,7 +16,7 @@ export function runPromise(sql, params) {
 
 export function allPromise(sql, params) {
   return new Promise((resolve, reject) => {
-    db.all(sql, params, function (err, rows) {
+    db.all(sql, params, (err, rows) => {
       if (!err) {
         resolve(rows);
       } else {
@@ -29,10 +29,10 @@ export function allPromise(sql, params) {
 runPromise(
   "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
 )
-  .then(() => {
-    return runPromise("INSERT INTO books (title) VALUES (?)",
-    ["CherryBook1"]);
-  })
+  .then(() =>
+  runPromise("INSERT INTO books (title) VALUES (?)",
+  ["CherryBook1"])
+  )
   .then((result) => {
     console.log(`lastID1: ${result.lastID}`);
     return runPromise("INSERT INTO books (title) VALUES (?)",
@@ -45,15 +45,15 @@ runPromise(
   })
   .then((result) =>
   console.log(`lastID3: ${result.lastID}`)
-  ) // result.lastIDが動くようにする
+  )
   .then(() =>
   allPromise("SELECT * FROM books")
   )
-  .then((rows) =>
-    rows.forEach((row) =>
-      console.log(row.id, row.title)
-    )
-  )
+.then((rows) => {
+  rows.forEach((row) => {
+    console.log(row.id, row.title);
+  });
+})
   .then(() =>
     runPromise("DROP TABLE books")
   )

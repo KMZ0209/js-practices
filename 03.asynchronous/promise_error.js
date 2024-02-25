@@ -12,7 +12,7 @@ runPromise(
   })
   .catch((err) =>
     console.error(`エラー1 inserting record: ${err.message}`)
-  ) // エラーメッセージを出す
+  )
   .then((result) => {
     console.log(`lastID1: ${result.lastID}`);
     return runPromise("INSERT INTO books (title) VALUES (null)",
@@ -25,7 +25,7 @@ runPromise(
     console.log(`lastID2: ${result.lastID}`);
     return runPromise("INSERT INTO books (title) VALUES (null)",
     ["CherryBook3"]);
-  }) // result.lastIDが動くようにする
+  })
   .catch((err) =>
     console.error(`エラー3 inserting record:, ${err.message}`)
   )
