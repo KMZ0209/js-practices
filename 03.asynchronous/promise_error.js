@@ -1,57 +1,30 @@
 import sqlite3 from "sqlite3";
 
 const db = new sqlite3.Database(":memory:");
+import {runPromise, allPromise} from './promise.js';
 
-function runPromise(sql, param) {
-  return new Promise((resolve, reject) => {
-    db.run(sql, param, function (err) {
-      if (!err) {
-        resolve(this);
-      } else {
-        reject(err);
-      }
-    });
-  });
-}
-function allPromise(sql, param) {
-  return new Promise((resolve, reject) => {
-    db.all(sql, param, (err, rows) => {
-      if (!err) {
-        resolve(rows);
-      } else {
-        reject(err);
-      }
-    });
-  });
-}
 runPromise(
-  "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE, content TEXT NOT NULL UNIQUE)",
+  "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
 )
   .then(() => {
-    return runPromise("INSERT INTO books (title, content) VALUES (null)", [
-      "CherryBook1",
-      "CherryBookContent1",
-    ]); // SQLのパラメータが2つあっても動くようにする
+    return runPromise("INSERT INTO books (title) VALUES (null)",
+    ["CherryBook1"]);
   })
   .catch((err) =>
     console.error(`エラー1 inserting record: ${err.message}`)
   ) // エラーメッセージを出す
   .then((result) => {
     console.log(`lastID1: ${result.lastID}`);
-    return runPromise("INSERT INTO books (title, content) VALUES (null)", [
-      "CherryBook2",
-      "CherryBookContent2",
-    ]); // SQLのパラメータが2つあっても動くようにする
+    return runPromise("INSERT INTO books (title) VALUES (null)",
+    ["CherryBook2"]);
   })
   .catch((err) =>
     console.error(`エラー2 inserting record: ${err.message}`)
   )
   .then((result) => {
     console.log(`lastID2: ${result.lastID}`);
-    return runPromise("INSERT INTO books (title, content) VALUES (null)", [
-      "CherryBook3",
-      "CherryBookContent3",
-    ]);
+    return runPromise("INSERT INTO books (title) VALUES (null)",
+    ["CherryBook3"]);
   }) // result.lastIDが動くようにする
   .catch((err) =>
     console.error(`エラー3 inserting record:, ${err.message}`)
@@ -62,7 +35,7 @@ runPromise(
   )
   .then((rows) => {
     rows.forEach((row) =>
-      console.log(row.id, row.title, row.content)
+      console.log(row.id, row.title)
     );
   })
   .catch((err) =>

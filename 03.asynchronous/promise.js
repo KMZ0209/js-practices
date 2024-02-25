@@ -2,9 +2,9 @@ import sqlite3 from "sqlite3";
 
 const db = new sqlite3.Database(":memory:");
 
-function runPromise(sql, param) {
+export function runPromise(sql, params) {
   return new Promise((resolve, reject) => {
-    db.run(sql, param, function (err) {
+    db.run(sql, params, function (err) {
       if (!err) {
         resolve(this);
       } else {
@@ -14,9 +14,9 @@ function runPromise(sql, param) {
   });
 }
 
-function allPromise(sql, param) {
+export function allPromise(sql, params) {
   return new Promise((resolve, reject) => {
-    db.all(sql, param, function (err, rows) {
+    db.all(sql, params, function (err, rows) {
       if (!err) {
         resolve(rows);
       } else {
@@ -27,27 +27,21 @@ function allPromise(sql, param) {
 }
 
 runPromise(
-  "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE, content TEXT NOT NULL UNIQUE)",
+  "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
 )
   .then(() => {
-    return runPromise("INSERT INTO books (title, content) VALUES (?, ?)", [
-      "CherryBook1",
-      "CherryBookContent1",
-    ]); // SQLのパラメータが2つあっても動くようにする
+    return runPromise("INSERT INTO books (title) VALUES (?)",
+    ["CherryBook1"]);
   })
   .then((result) => {
     console.log(`lastID1: ${result.lastID}`);
-    return runPromise("INSERT INTO books (title, content) VALUES (?, ?)", [
-      "CherryBook2",
-      "CherryBookContent2",
-    ]); // SQLのパラメータが2つあっても動くようにする
+    return runPromise("INSERT INTO books (title) VALUES (?)",
+    ["CherryBook2"]);
   })
   .then((result) => {
     console.log(`lastID2: ${result.lastID}`);
-    return runPromise("INSERT INTO books (title, content) VALUES (?, ?)", [
-      "CherryBook3",
-      "CherryBookContent3",
-    ]); // SQLのパラメータが2つあっても動くようにする
+    return runPromise("INSERT INTO books (title) VALUES (?)",
+    ["CherryBook3"]);
   })
   .then((result) =>
   console.log(`lastID3: ${result.lastID}`)
@@ -57,7 +51,7 @@ runPromise(
   )
   .then((rows) =>
     rows.forEach((row) =>
-      console.log(row.id, row.title, row.content)
+      console.log(row.id, row.title)
     )
   )
   .then(() =>
