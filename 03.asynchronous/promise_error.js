@@ -1,7 +1,4 @@
-import sqlite3 from "sqlite3";
-
-const db = new sqlite3.Database(":memory:");
-import {runPromise, allPromise} from './promise.js';
+import {runPromise, allPromise, closePromise} from './promise.js';
 
 runPromise(
   "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
@@ -11,7 +8,7 @@ runPromise(
     ["CherryBook1"]);
   })
   .catch((err) =>
-    console.error(`エラー1 inserting record: ${err.message}`)
+  console.error(`エラー1 inserting record: ${err.message}`)
   )
   .then((result) => {
     console.log(`lastID1: ${result.lastID}`);
@@ -19,7 +16,7 @@ runPromise(
     ["CherryBook2"]);
   })
   .catch((err) =>
-    console.error(`エラー2 inserting record: ${err.message}`)
+  console.error(`エラー2 inserting record: ${err.message}`)
   )
   .then((result) => {
     console.log(`lastID2: ${result.lastID}`);
@@ -29,9 +26,8 @@ runPromise(
   .catch((err) =>
     console.error(`エラー3 inserting record:, ${err.message}`)
   )
-
   .then(() =>
-    allPromise("SELECT * FROM books", null)
+    allPromise("SELECT * FROM nonexistent")
   )
   .then((rows) => {
     rows.forEach((row) =>
@@ -45,5 +41,5 @@ runPromise(
     runPromise("DROP TABLE books")
   )
   .then(() =>
-    db.close()
-  )
+    closePromise()
+  );
