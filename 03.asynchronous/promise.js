@@ -1,58 +1,18 @@
-import sqlite3 from "sqlite3";
-
-const db = new sqlite3.Database(":memory:");
-export function runPromise(sql, params) {
-  return new Promise((resolve, reject) => {
-    db.run(sql, params, function (err) {
-      if (!err) {
-        resolve(this);
-      } else {
-        reject(err);
-      }
-    });
-  });
-}
-
-export function allPromise(sql, params) {
-  return new Promise((resolve, reject) => {
-    db.all(sql, params, (err, rows) => {
-      if (!err) {
-        resolve(rows);
-      } else {
-        reject(err);
-      }
-    });
-  });
-}
-
-export function closePromise() {
-  return new Promise((resolve, reject) => {
-    db.close((err) => {
-      if (!err) {
-        resolve();
-      } else {
-        reject(err);
-      }
-    });
-  });
-}
+import { runPromise, allPromise, closePromise } from "./functions.js";
 
 runPromise(
-  "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)",
+  "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
 )
   .then(() =>
-  runPromise("INSERT INTO books (title) VALUES (?)",
-  ["CherryBook1"])
+    runPromise("INSERT INTO books (title) VALUES (?)", ["CherryBook1"])
   )
   .then((result) => {
     console.log(`lastID1: ${result.lastID}`);
-    return runPromise("INSERT INTO books (title) VALUES (?)",
-    ["CherryBook2"]);
+    return runPromise("INSERT INTO books (title) VALUES (?)", ["CherryBook2"]);
   })
   .then((result) => {
     console.log(`lastID2: ${result.lastID}`);
-    return runPromise("INSERT INTO books (title) VALUES (?)",
-    ["CherryBook3"])
+    return runPromise("INSERT INTO books (title) VALUES (?)", ["CherryBook3"]);
   })
   .then((result) => {
     console.log(`lastID3: ${result.lastID}`);
@@ -64,6 +24,4 @@ runPromise(
     });
     return runPromise("DROP TABLE books");
   })
-  .then(() =>
-    closePromise()
-  );
+  .then(() => closePromise());

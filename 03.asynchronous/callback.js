@@ -20,17 +20,12 @@ db.run(
               ["Cherry Book 3"],
               function () {
                 console.log(`lastID: ${this.lastID}`);
-                db.all(
-                  "SELECT * FROM books",
-                  (_, rows) => {
-                    rows.forEach((row) =>
-                    console.log(row.id, row.title)
-                    )
-                    db.run("DROP TABLE books", () => {
-                      db.close();
-                    });
-                  }
-                );
+                db.all("SELECT * FROM books", (_, rows) => {
+                  rows.forEach((row) => console.log(row.id, row.title));
+                  db.run("DROP TABLE books", () => {
+                    db.close();
+                  });
+                });
               }
             );
           }

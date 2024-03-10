@@ -30,9 +30,9 @@ db.run(
                 console.error(`エラー selecting record: ${err.message}`);
               } else {
                 rows.forEach((row) => {
-                console.log(row.id, row.title);
-              });
-            }
+                  console.log(row.id, row.title);
+                });
+              }
             },
             (err) => {
               if (err) {
