@@ -24,8 +24,7 @@ db.run(
             console.log(`Inserted row with ID: ${this.lastID}`);
           }
           db.all(
-            "SELECT * FROM nonexistent",
-            (err, rows) => {
+            "SELECT * FROM nonexistent", (err, rows) => {
               if (err) {
                 console.error(`エラー selecting record: ${err.message}`);
               } else {
@@ -33,18 +32,12 @@ db.run(
                   console.log(row.id, row.title);
                 });
               }
-            },
-            (err) => {
-              if (err) {
-                console.error(`エラー selecting record: ${err.message}`);
-              }
               db.run("DROP TABLE books", () => {
                 db.close();
               });
+            })
             }
           );
         });
       });
     });
-  }
-);
