@@ -1,4 +1,4 @@
-import { runPromise, allPromise, closePromise } from "./functions.js";
+import { runPromise, allPromise, closePromise } from "./promise_functions.js";
 
 runPromise(
   "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
