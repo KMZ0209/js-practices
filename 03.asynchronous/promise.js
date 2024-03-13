@@ -1,27 +1,36 @@
+import sqlite3 from "sqlite3";
+
+const db = new sqlite3.Database(":memory:");
+
 import { runPromise, allPromise, closePromise } from "./promise_functions.js";
 
 runPromise(
+  db,
   "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
 )
   .then(() =>
-    runPromise("INSERT INTO books (title) VALUES (?)", ["CherryBook1"])
+    runPromise(db, "INSERT INTO books (title) VALUES (?)", ["CherryBook1"])
   )
   .then((result) => {
     console.log(`lastID1: ${result.lastID}`);
-    return runPromise("INSERT INTO books (title) VALUES (?)", ["CherryBook2"]);
+    return runPromise(db, "INSERT INTO books (title) VALUES (?)", [
+      "CherryBook2",
+    ]);
   })
   .then((result) => {
     console.log(`lastID2: ${result.lastID}`);
-    return runPromise("INSERT INTO books (title) VALUES (?)", ["CherryBook3"]);
+    return runPromise(db, "INSERT INTO books (title) VALUES (?)", [
+      "CherryBook3",
+    ]);
   })
   .then((result) => {
     console.log(`lastID3: ${result.lastID}`);
-    return allPromise("SELECT * FROM books");
+    return allPromise(db, "SELECT * FROM books");
   })
   .then((rows) => {
     rows.forEach((row) => {
       console.log(row.id, row.title);
     });
-    return runPromise("DROP TABLE books");
+    return runPromise(db, "DROP TABLE books");
   })
-  .then(() => closePromise());
+  .then(() => closePromise(db));
