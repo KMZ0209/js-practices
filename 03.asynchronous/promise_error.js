@@ -24,7 +24,7 @@ runPromise(
   })
   .catch((err) => {
     console.error(`エラー2 inserting record: ${err.message}`);
-    return runPromise(db, "INSERT INTO books (title) VALUES (NULL)");
+    throw err;
   })
   .then((result) => {
     console.log(`lastID: ${result.lastID}`);

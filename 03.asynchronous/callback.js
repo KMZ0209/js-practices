@@ -7,17 +7,17 @@ db.run(
   () => {
     db.run(
       "INSERT INTO books (title) VALUES (?)",
-      ["Cherry Book 1"],
+      ["CherryBook1"],
       function () {
         console.log(`lastID: ${this.lastID}`);
         db.run(
           "INSERT INTO books (title) VALUES (?)",
-          ["Cherry Book 2"],
+          ["CherryBook2"],
           function () {
             console.log(`lastID: ${this.lastID}`);
             db.run(
               "INSERT INTO books (title) VALUES (?)",
-              ["Cherry Book 3"],
+              ["CherryBook3"],
               function () {
                 console.log(`lastID: ${this.lastID}`);
                 db.all("SELECT * FROM books", (_, rows) => {

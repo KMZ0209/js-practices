@@ -15,19 +15,19 @@ runPromise(
     runPromise(db, "INSERT INTO books (title) VALUES (?)", ["CherryBook1"])
   )
   .then((result) => {
-    console.log(`lastID1: ${result.lastID}`);
+    console.log(`lastID: ${result.lastID}`);
     return runPromise(db, "INSERT INTO books (title) VALUES (?)", [
       "CherryBook2",
     ]);
   })
   .then((result) => {
-    console.log(`lastID2: ${result.lastID}`);
+    console.log(`lastID: ${result.lastID}`);
     return runPromise(db, "INSERT INTO books (title) VALUES (?)", [
       "CherryBook3",
     ]);
   })
   .then((result) => {
-    console.log(`lastID3: ${result.lastID}`);
+    console.log(`lastID: ${result.lastID}`);
     return allPromise(db, "SELECT * FROM books");
   })
   .then((rows) => {
