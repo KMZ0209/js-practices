@@ -1,5 +1,9 @@
 import sqlite3 from "sqlite3";
-import { runPromise, allPromise, closePromise } from "./promise_functions.js";
+import {
+  runPromise,
+  allPromise,
+  closePromise,
+} from "./sqlite_promise_functions.js";
 
 const db = new sqlite3.Database(":memory:");
 
@@ -9,21 +13,21 @@ runPromise(
 )
   .then(() => runPromise(db, "INSERT INTO books (title) VALUES (NULL)"))
   .then((result) => {
-    console.log(`Inserted row with ID: ${result.lastID}`);
+    console.log(`lastID: ${result.lastID}`);
   })
   .catch((err) => {
     console.error(`エラー1 inserting record: ${err.message}`);
     return runPromise(db, "INSERT INTO books (title) VALUES (NULL)");
   })
   .then((result) => {
-    console.log(`Inserted row with ID: ${result.lastID}`);
+    console.log(`lastID: ${result.lastID}`);
   })
   .catch((err) => {
     console.error(`エラー2 inserting record: ${err.message}`);
     return runPromise(db, "INSERT INTO books (title) VALUES (NULL)");
   })
   .then((result) => {
-    console.log(`Inserted row with ID: ${result.lastID}`);
+    console.log(`lastID: ${result.lastID}`);
   })
   .catch((err) => {
     console.error(`エラー3 inserting record: ${err.message}`);

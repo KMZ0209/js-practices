@@ -1,5 +1,9 @@
 import sqlite3 from "sqlite3";
-import { runPromise, allPromise, closePromise } from "./promise_functions.js";
+import {
+  runPromise,
+  allPromise,
+  closePromise,
+} from "./sqlite_promise_functions.js";
 
 const db = new sqlite3.Database(":memory:");
 

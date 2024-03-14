@@ -9,19 +9,19 @@ db.run(
       if (err) {
         console.error(`エラー1 inserting record: ${err.message}`);
       } else {
-        console.log(`Inserted row with ID: ${this.lastID}`);
+        console.log(`lastID: ${this.lastID}`);
       }
       db.run("INSERT INTO books (title) VALUES (NULL)", (err) => {
         if (err) {
           console.error(`エラー2 inserting record: ${err.message}`);
         } else {
-          console.log(`Inserted row with ID: ${this.lastID}`);
+          console.log(`lastID: ${this.lastID}`);
         }
         db.run("INSERT INTO books (title) VALUES (NULL)", (err) => {
           if (err) {
             console.error(`エラー3 inserting record: ${err.message}`);
           } else {
-            console.log(`Inserted row with ID: ${this.lastID}`);
+            console.log(`lastID: ${this.lastID}`);
           }
           db.all("SELECT * FROM nonexistent", (err, rows) => {
             if (err) {
