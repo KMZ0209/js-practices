@@ -12,19 +12,21 @@ runPromise(
   "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
 )
   .then(() => runPromise(db, "INSERT INTO books (title) VALUES (NULL)"))
-  .then((result) => {
-    console.log(`lastID: ${result.lastID}`);
-  })
-  .catch((err) => {
-    console.error(`エラー1 inserting record: ${err.message}`);
-    return runPromise(db, "INSERT INTO books (title) VALUES (NULL)");
+  .finally(() => {
+    return runPromise(db, "INSERT INTO books (title) VALUES (NULL)")
+      .then((result) => {
+        console.log(`lastID: ${result.lastID}`);
+      })
+      .catch((err) => {
+        console.error(`エラー1 inserting record: ${err.message}`);
+      });
   })
   .then((result) => {
     console.log(`lastID: ${result.lastID}`);
   })
   .catch((err) => {
     console.error(`エラー2 inserting record: ${err.message}`);
-    throw err;
+    return runPromise(db, "INSERT INTO books (title) VALUES (NULL)");
   })
   .then((result) => {
     console.log(`lastID: ${result.lastID}`);
