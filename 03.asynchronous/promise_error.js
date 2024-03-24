@@ -14,20 +14,18 @@ runPromise(
   .then(() => runPromise(db, "INSERT INTO books (title) VALUES (NULL)"))
   .then((result) => {
     console.log(`lastID: ${result.lastID}`);
-    return result;
   })
   .catch((err) => {
     console.error(`エラー1 inserting record: ${err.message}`);
-    return runPromise(db, "INSERT INTO books (title) VALUES (NULL)");
   })
+  .then(() => runPromise(db, "INSERT INTO books (title) VALUES (NULL)"))
   .then((result) => {
     console.log(`lastID: ${result.lastID}`);
-    return;
   })
   .catch((err) => {
     console.error(`エラー2 inserting record: ${err.message}`);
-    return runPromise(db, "INSERT INTO books (title) VALUES (NULL)");
   })
+  .then(() => runPromise(db, "INSERT INTO books (title) VALUES (NULL)"))
   .then((result) => {
     console.log(`lastID: ${result.lastID}`);
   })
