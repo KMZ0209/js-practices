@@ -14,6 +14,7 @@ runPromise(
   .then(() => runPromise(db, "INSERT INTO books (title) VALUES (NULL)"))
   .then((result) => {
     console.log(`lastID: ${result.lastID}`);
+    return result;
   })
   .catch((err) => {
     console.error(`エラー1 inserting record: ${err.message}`);
@@ -21,7 +22,7 @@ runPromise(
   })
   .then((result) => {
     console.log(`lastID: ${result.lastID}`);
-    return runPromise(db, "INSERT INTO books (title) VALUES (NULL)");
+    return;
   })
   .catch((err) => {
     console.error(`エラー2 inserting record: ${err.message}`);
@@ -29,7 +30,6 @@ runPromise(
   })
   .then((result) => {
     console.log(`lastID: ${result.lastID}`);
-    return runPromise(db, "INSERT INTO books (title) VALUES (NULL)");
   })
   .catch((err) => {
     console.error(`エラー3 inserting record: ${err.message}`);
