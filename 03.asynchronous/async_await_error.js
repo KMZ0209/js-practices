@@ -1,20 +1,20 @@
 import sqlite3 from "sqlite3";
 import {
-  runAsync,
-  allAsync,
-  closeAsync,
-} from "./sqlite_async_await_functions.js";
+  runPromise,
+  allPromise,
+  closePromise,
+} from "./sqlite_promise_functions.js";
 
 async function main() {
   const db = new sqlite3.Database(":memory:");
 
-  await runAsync(
+  await runPromise(
     db,
     "CREATE TABLE books (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT NOT NULL UNIQUE)"
   );
 
   try {
-    const result1 = await runAsync(
+    const result1 = await runPromise(
       db,
       "INSERT INTO books (title) VALUES (NULL)"
     );
@@ -28,7 +28,7 @@ async function main() {
   }
 
   try {
-    const result2 = await runAsync(
+    const result2 = await runPromise(
       db,
       "INSERT INTO books (title) VALUES (NULL)"
     );
@@ -42,7 +42,7 @@ async function main() {
   }
 
   try {
-    const result3 = await runAsync(
+    const result3 = await runPromise(
       db,
       "INSERT INTO books (title) VALUES (NULL)"
     );
@@ -56,7 +56,7 @@ async function main() {
   }
 
   try {
-    const rows = await allAsync(db, "SELECT * FROM nonexistent");
+    const rows = await allPromise(db, "SELECT * FROM nonexistent");
     for (const row of rows) {
       console.log(row.id, row.title);
     }
@@ -68,8 +68,8 @@ async function main() {
     }
   }
 
-  await runAsync(db, "DROP TABLE books");
-  await closeAsync(db);
+  await runPromise(db, "DROP TABLE books");
+  await closePromise(db);
 }
 
 main();
