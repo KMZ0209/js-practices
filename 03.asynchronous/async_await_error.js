@@ -18,7 +18,11 @@ try {
   );
   console.log(`lastID: ${result.lastID}`);
 } catch (err) {
-  console.error(`エラー1 inserting record: ${err.message}`);
+  if (err instanceof Error) {
+    console.error(`エラー1 inserting record: ${err.message}`);
+  } else {
+    throw err;
+  }
 }
 try {
   const result = await runPromise(
@@ -27,7 +31,11 @@ try {
   );
   console.log(`lastID: ${result.lastID}`);
 } catch (err) {
-  console.error(`エラー2 inserting record: ${err.message}`);
+  if (err instanceof Error) {
+    console.error(`エラー2 inserting record: ${err.message}`);
+  } else {
+    throw err;
+  }
 }
 try {
   const result = await runPromise(
@@ -36,7 +44,11 @@ try {
   );
   console.log(`lastID: ${result.lastID}`);
 } catch (err) {
-  console.error(`エラー3 inserting record: ${err.message}`);
+  if (err instanceof Error) {
+    console.error(`エラー3 inserting record: ${err.message}`);
+  } else {
+    throw err;
+  }
 }
 try {
   const rows = await allPromise(db, "SELECT * FROM nonexistent");
