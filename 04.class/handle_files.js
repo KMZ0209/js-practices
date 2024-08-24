@@ -1,12 +1,7 @@
 import fs from "fs";
-import readline from "readline";
 
 export default class HandleFile {
   constructor() {
-    this.reader = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    });
     this.fileName = "memo.json";
     this.jsonData = [];
     this.loadJsonData();

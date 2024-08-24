@@ -1,6 +1,7 @@
 import HandleFile from "./handle_files.js";
 import pkg from "enquirer";
 const { Select } = pkg;
+import readline from "readline";
 
 export default class DisplayMemo extends HandleFile {
   constructor(fileName) {
@@ -10,10 +11,14 @@ export default class DisplayMemo extends HandleFile {
   }
 
   addMemo() {
-    this.reader.on("line", (line) => {
+    const reader = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+    reader.on("line", (line) => {
       this.lines.push(line);
     });
-    this.reader.on("close", async () => {
+    reader.on("close", async () => {
       if (this.lines.length > 0) {
         try {
           await this.loadJsonData();
@@ -25,6 +30,7 @@ export default class DisplayMemo extends HandleFile {
         }
         this.lines = [];
       }
+      reader.close();
     });
   }
 
