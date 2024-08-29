@@ -1,6 +1,6 @@
 import HandleFile from "./handle_files.js";
-import pkg from "enquirer";
-const { Select } = pkg;
+import enquirer from "enquirer";
+const { Select } = enquirer;
 import readline from "readline";
 
 export default class DisplayMemo extends HandleFile {
