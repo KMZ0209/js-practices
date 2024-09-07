@@ -6,8 +6,8 @@ import readline from "readline";
 export default class DisplayMemo extends HandleFile {
   constructor(fileName) {
     super(fileName);
-    this.lines = [];
-    this.jsonData = [];
+    this.memos = [];
+    this.memoData = [];
   }
 
   addMemo() {
@@ -16,19 +16,19 @@ export default class DisplayMemo extends HandleFile {
       output: process.stdout,
     });
     reader.on("line", (line) => {
-      this.lines.push(line);
+      this.memos.push(line);
     });
     reader.on("close", async () => {
-      if (this.lines.length > 0) {
+      if (this.memos.length > 0) {
         try {
-          await this.loadJsonData();
-          this.jsonData.push(this.lines);
-          await this.saveJsonData(this.jsonData);
+          await this.loadmemoData();
+          this.memoData.push(this.memos);
+          await this.savememoData(this.memoData);
           console.log("メモが追加されました。");
         } catch (error) {
           console.error("メモの追加に失敗しました:", error);
         }
-        this.lines = [];
+        this.memos = [];
       }
       reader.close();
     });
@@ -36,10 +36,10 @@ export default class DisplayMemo extends HandleFile {
 
   async displayMemoList() {
     try {
-      await this.loadJsonData();
+      await this.loadmemoData();
       console.log("入力されたメモリスト");
-      if (this.jsonData.length > 0) {
-        this.jsonData.forEach((memo, index) => {
+      if (this.memoData.length > 0) {
+        this.memoData.forEach((memo, index) => {
           if (memo.length > 0) {
             console.log(`${index + 1} ${memo[0].substring(0, 10)}`);
           }
@@ -54,9 +54,9 @@ export default class DisplayMemo extends HandleFile {
 
   async displayFullMemo() {
     try {
-      await this.loadJsonData();
-      if (this.jsonData.length > 0) {
-        const choices = this.jsonData.map((memo, index) => ({
+      await this.loadmemoData();
+      if (this.memoData.length > 0) {
+        const choices = this.memoData.map((memo, index) => ({
           name: `${index + 1} ${memo[0].substring(0, 10)}`,
           value: index,
         }));
@@ -67,7 +67,7 @@ export default class DisplayMemo extends HandleFile {
         });
         const selectIndex = await prompt.run();
         const memoNumber = parseInt(selectIndex[0].trim(), 10) - 1;
-        console.log(this.jsonData[memoNumber].join("\n"));
+        console.log(this.memoData[memoNumber].join("\n"));
       } else {
         console.log("メモがありません。");
       }
@@ -78,9 +78,9 @@ export default class DisplayMemo extends HandleFile {
 
   async deleteMemo() {
     try {
-      await this.loadJsonData();
-      if (this.jsonData.length > 0) {
-        const choices = this.jsonData.map((memo, index) => ({
+      await this.loadmemoData();
+      if (this.memoData.length > 0) {
+        const choices = this.memoData.map((memo, index) => ({
           name: `${index + 1} ${memo[0].substring(0, 10)}`,
           value: index,
         }));
@@ -91,8 +91,8 @@ export default class DisplayMemo extends HandleFile {
         });
         const selectValue = await prompt.run();
         const memoNumber = parseInt(selectValue[0].trim(), 10) - 1;
-        this.jsonData.splice(memoNumber, 1);
-        await this.saveJsonData(this.jsonData);
+        this.memoData.splice(memoNumber, 1);
+        await this.savememoData(this.memoData);
         console.log("選択したメモを削除しました");
       } else {
         console.log("削除するメモがありません。");
