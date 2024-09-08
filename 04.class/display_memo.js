@@ -25,6 +25,18 @@ export default class MemoDisplayer {
       console.error("データ保存に失敗しました", error);
     }
   }
+  async selectmemoData(){
+    const choices = this.memoData.map((memo, index) => ({
+    name: `${index + 1} ${memo[0].substring(0, 10)}`,
+    value: index,
+    }));
+    const prompt = new Select({
+    name: "memo",
+    message: "MemoList",
+    choices: choices,
+    });
+    return await prompt.run();
+  }
 
   addMemo() {
     const reader = readline.createInterface({
@@ -72,16 +84,7 @@ export default class MemoDisplayer {
     try {
       await this.loadmemoData();
       if (this.memoData.length > 0) {
-        const choices = this.memoData.map((memo, index) => ({
-          name: `${index + 1} ${memo[0].substring(0, 10)}`,
-          value: index,
-        }));
-        const prompt = new Select({
-          name: "memo",
-          message: "MemoList",
-          choices: choices,
-        });
-        const selectIndex = await prompt.run();
+        const selectIndex = await this.selectmemoData();
         const memoNumber = parseInt(selectIndex[0].trim(), 10) - 1;
         console.log(this.memoData[memoNumber].join("\n"));
       } else {
@@ -96,17 +99,8 @@ export default class MemoDisplayer {
     try {
       await this.loadmemoData();
       if (this.memoData.length > 0) {
-        const choices = this.memoData.map((memo, index) => ({
-          name: `${index + 1} ${memo[0].substring(0, 10)}`,
-          value: index,
-        }));
-        const prompt = new Select({
-          name: "memo",
-          message: "MemoList",
-          choices: choices,
-        });
-        const selectValue = await prompt.run();
-        const memoNumber = parseInt(selectValue[0].trim(), 10) - 1;
+        const selectIndex = await this.selectmemoData();
+        const memoNumber = parseInt(selectIndex[0].trim(), 10) - 1;
         this.memoData.splice(memoNumber, 1);
         await this.savememoData(this.memoData);
         console.log("選択したメモを削除しました");
