@@ -50,7 +50,7 @@ export default class MemoDisplayer {
     }
   }
 
-  async addMemo() {
+  addMemo() {
     const reader = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
@@ -60,11 +60,14 @@ export default class MemoDisplayer {
     });
     reader.on("close", async () => {
       if (this.memos.length > 0) {
-        await this.loadAndHandleMemoData.call(this, async () => {
+        try {
+          await this.loadMemoData();
           this.memoData.push(this.memos);
           await this.saveMemoData(this.memoData);
           console.log("メモが追加されました。");
-        });
+        } catch (error) {
+          console.error("メモの追加に失敗しました:", error);
+        }
         this.memos = [];
       }
       reader.close();
