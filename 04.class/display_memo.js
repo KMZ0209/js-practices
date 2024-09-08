@@ -10,7 +10,7 @@ export default class MemoDisplayer {
     this.memoData = [];
   }
 
-  async loadmemoData() {
+  async loadMemoData() {
     try {
       const fileData = await fs.readFile(this.fileName);
       this.memoData = JSON.parse(fileData);
@@ -18,14 +18,14 @@ export default class MemoDisplayer {
       console.error("データ取得に失敗しました", error);
     }
   }
-  async savememoData(data) {
+  async saveMemoData(data) {
     try {
       await fs.writeFile(this.fileName, JSON.stringify(data));
     } catch (error) {
       console.error("データ保存に失敗しました", error);
     }
   }
-  async selectmemoData(){
+  async selectMemoData(){
     const choices = this.memoData.map((memo, index) => ({
     name: `${index + 1} ${memo[0].substring(0, 10)}`,
     value: index,
@@ -49,9 +49,9 @@ export default class MemoDisplayer {
     reader.on("close", async () => {
       if (this.memos.length > 0) {
         try {
-          await this.loadmemoData();
+          await this.loadMemoData();
           this.memoData.push(this.memos);
-          await this.savememoData(this.memoData);
+          await this.saveMemoData(this.memoData);
           console.log("メモが追加されました。");
         } catch (error) {
           console.error("メモの追加に失敗しました:", error);
@@ -64,7 +64,7 @@ export default class MemoDisplayer {
 
   async displayMemoList() {
     try {
-      await this.loadmemoData();
+      await this.loadMemoData();
       console.log("入力されたメモリスト");
       if (this.memoData.length > 0) {
         this.memoData.forEach((memo, index) => {
@@ -82,9 +82,9 @@ export default class MemoDisplayer {
 
   async displayFullMemo() {
     try {
-      await this.loadmemoData();
+      await this.loadMemoData();
       if (this.memoData.length > 0) {
-        const selectIndex = await this.selectmemoData();
+        const selectIndex = await this.selectMemoData();
         const memoNumber = parseInt(selectIndex[0].trim(), 10) - 1;
         console.log(this.memoData[memoNumber].join("\n"));
       } else {
@@ -97,12 +97,12 @@ export default class MemoDisplayer {
 
   async deleteMemo() {
     try {
-      await this.loadmemoData();
+      await this.loadMemoData();
       if (this.memoData.length > 0) {
-        const selectIndex = await this.selectmemoData();
+        const selectIndex = await this.selectMemoData();
         const memoNumber = parseInt(selectIndex[0].trim(), 10) - 1;
         this.memoData.splice(memoNumber, 1);
-        await this.savememoData(this.memoData);
+        await this.saveMemoData(this.memoData);
         console.log("選択したメモを削除しました");
       } else {
         console.log("削除するメモがありません。");
