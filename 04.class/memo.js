@@ -1,10 +1,10 @@
 import yargs from "yargs";
-import DisplayMemo from "./display_memo.js";
+import MemoDisplayer from "./display_memo.js";
 
 class MemoManager {
   constructor(fileName) {
     this.fileName = fileName;
-    this.displayMemo = new DisplayMemo(fileName);
+    this.displayMemo = new MemoDisplayer(fileName);
     this.argv = yargs(process.argv.slice(2)).options({
       l: {
         type: "boolean",

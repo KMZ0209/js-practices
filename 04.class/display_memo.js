@@ -1,13 +1,29 @@
-import HandleFile from "./handle_files.js";
+import fs from "fs/promises";
 import enquirer from "enquirer";
 const { Select } = enquirer;
 import readline from "readline";
 
-export default class DisplayMemo extends HandleFile {
+export default class MemoDisplayer {
   constructor(fileName) {
-    super(fileName);
+    this.fileName = fileName;
     this.memos = [];
     this.memoData = [];
+  }
+
+  async loadmemoData() {
+    try {
+      const fileData = await fs.readFile(this.fileName);
+      this.memoData = JSON.parse(fileData);
+    } catch (error) {
+      console.error("データ取得に失敗しました", error);
+    }
+  }
+  async savememoData(data) {
+    try {
+      await fs.writeFile(this.fileName, JSON.stringify(data));
+    } catch (error) {
+      console.error("データ保存に失敗しました", error);
+    }
   }
 
   addMemo() {
