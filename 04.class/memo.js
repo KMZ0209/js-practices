@@ -5,25 +5,10 @@ class Memo {
   constructor(fileName) {
     this.fileName = fileName;
     this.displayMemo = new MemoDisplay(fileName);
-    this.argv = yargs(process.argv.slice(2)).options({
-      l: {
-        type: "boolean",
-        describe: "Display list of memos",
-        demandOption: false,
-      },
-      r: {
-        type: "boolean",
-        describe: "Display full memos",
-        demandOption: false,
-      },
-      d: {
-        type: "boolean",
-        describe: "Delete of memos",
-        demandOption: false,
-      },
-    }).argv;
+    this.argv = yargs(process.argv.slice(2))
+      .boolean(["l", "r", "d"])
+      .argv;
   }
-
   execute() {
     this.argv.l
     ? this.displayMemoList() : this.argv.r
